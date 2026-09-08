@@ -1,63 +1,47 @@
-# World Explorer — Layout (dados mockados)
+# World Explorer
 
-Este projeto contém **apenas os layouts** das 3 telas do World Explorer
+Por enquanto, apenas os layouts das 3 telas do World Explorer
 (Explorar, Detalhes do país e Favoritos), implementados em Flutter,
 seguindo os protótipos enviados. Todos os dados de países são **mockados**
-(arquivo `lib/data/mock_countries.dart`) — não há integração com a REST
-Countries API ainda, conforme solicitado.
+(`lib/features/explore/data/country_repository.dart`), não havendo integração
+com a REST Countries API ainda.
 
 ## O que já funciona
 
 - Tela **Explorar**: busca por nome, filtro por região (bottom sheet),
-  lista de países com paginação simples, navegação para detalhes.
+  lista de países com paginação simples, navegação para detalhes
 - Tela **Detalhes**: nome oficial, capital, população, moeda e idiomas;
-  botão "Adicionar aos favoritos" (alterna para "Remover dos favoritos").
+  botão "Adicionar aos favoritos" (alterna para "Remover dos favoritos")
 - Tela **Favoritos**: lista dos países favoritados, com botão de remover
-  (ícone de lixeira) e navegação para os detalhes.
+  (ícone de lixeira) e navegação para os detalhes
 - Estado de favoritos compartilhado em memória (`FavoritesController`) —
-  ainda **não persiste** entre execuções, já que o escopo pediu só o
-  layout. Quando for implementar a persistência local (ex:
-  `shared_preferences`), basta adaptar esse controller.
-- Sem dependência de imagens externas: as bandeiras usam emojis, então o
-  projeto roda sem internet.
+  ainda **não persiste** entre execuções. Quando for implementar a
+  persistência local (ex: `shared_preferences`), basta adaptar esse
+  controller
+- Ícones do protótipo (Figma) em `assets/icons/` e `assets/flags/`,
+  usados no lugar dos ícones padrão do Material
+- Tipografia **Inter** (fonte variável, embutida em `assets/fonts/` —
+  não depende de internet para exibir a fonte)
 
 ## Como rodar
 
-1. Extraia a pasta `world_explorer` para o seu computador.
-2. Abra um terminal **dentro da pasta do projeto** e rode:
-   ```bash
-   flutter create .
-   ```
-   Isso apenas adiciona as pastas nativas (`android/`, `ios/`, etc.) que
-   não vêm no zip — ele **não sobrescreve** o `lib/` nem o `pubspec.yaml`
-   que já existem.
-3. Instale as dependências:
-   ```bash
-   flutter pub get
-   ```
-4. Abra a pasta no Android Studio (File > Open) e rode em um emulador ou
-   dispositivo físico, ou pelo terminal:
-   ```bash
-   flutter run
-   ```
+- Rode ```flutter create .``` na raiz do projeto (adiciona as pastas nativas `android/`, `ios/`, etc.)
+- Rode ```flutter pub get``` para baixar as dependências
+- Rode ```flutter run``` para executar o projeto (Android Studio ou terminal)
 
-## Estrutura
+## Arquitetura — feature-first
 
-```
-lib/
-├── main.dart
-├── models/
-│   └── country.dart
-├── data/
-│   ├── mock_countries.dart       # lista mockada de países
-│   └── favorites_controller.dart # estado de favoritos em memória
-├── theme/
-│   └── app_theme.dart            # cores e estilos globais
-├── widgets/
-│   ├── app_top_bar.dart          # cabeçalho "World Explorer"
-│   └── app_bottom_nav.dart       # barra inferior Explorar/Favoritos
-└── screens/
-    ├── explore_screen.dart
-    ├── details_screen.dart
-    └── favorites_screen.dart
-```
+O código é organizado por **feature** (funcionalidade de negócio), não por
+tipo de arquivo. Cada feature carrega seus próprios dados e apresentação;
+o que é realmente compartilhado entre features fica isolado em `core/` e
+`shared/`
+
+Regra de dependência: uma feature nunca importa arquivos de dentro de
+outra feature "irmã" para reaproveitar widgets internos — o
+`AppBottomNav`, por exemplo, navega por **rota nomeada**
+(`AppRoutes.explore` / `AppRoutes.favorites`) em vez de importar
+`ExploreScreen`/`FavoritesScreen` diretamente, para não acoplar
+`shared/` às telas de cada feature. `country_details` e `favorites`
+importam a tela uma da outra apenas para navegar ao tocar em um país da
+lista (`Navigator.push` direto), o que é aceitável em apps pequenos; num
+projeto maior isso normalmente vira uma rota nomeada também.
