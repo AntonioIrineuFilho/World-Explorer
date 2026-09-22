@@ -9,7 +9,7 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.cardWhite,
         borderRadius: BorderRadius.circular(16),
@@ -21,19 +21,21 @@ class InfoCard extends StatelessWidget {
           ),
         ],
       ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        children: [
-          _InfoRow(label: 'Nome oficial', value: country.officialName),
-          _InfoRow(label: 'Capital', value: country.capital),
-          _InfoRow(label: 'População', value: country.populationFormatted),
-          _InfoRow(label: 'Moeda', value: country.currency),
-          _InfoRow(
-            label: 'Idiomas',
-            value: country.languagesFormatted,
-            isLast: true,
-          ),
-        ],
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Column(
+          children: [
+            _InfoRow(label: 'Nome oficial', value: country.officialName),
+            _InfoRow(label: 'Capital', value: country.capital),
+            _InfoRow(label: 'População', value: country.populationFormatted),
+            _InfoRow(label: 'Moeda', value: country.currency),
+            _InfoRow(
+              label: 'Idiomas',
+              value: country.languagesFormatted,
+              isLast: true,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -52,36 +54,42 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-      decoration: BoxDecoration(
-        border: isLast
-            ? null
-            : const Border(
-                bottom: BorderSide(color: AppColors.textGray, width: 1),
-              ),
-      ),
+    return SizedBox(
       width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              color: AppColors.primaryBlue,
-              fontWeight: FontWeight.w800,
-              fontSize: 16,
-            ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: isLast
+              ? null
+              : const Border(
+                  bottom: BorderSide(color: AppColors.textGray, width: 1),
+                ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                label,
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                  color: AppColors.primaryBlue,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                value,
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontSize: 15,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(
-              color: Colors.black87,
-              fontSize: 15,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

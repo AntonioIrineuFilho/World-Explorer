@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import '../../../../shared/models/country.dart';
 import '../../../../shared/widgets/app_bottom_nav.dart';
 import '../../../../shared/widgets/app_top_bar.dart';
-import '../../../favorites/data/favorites_controller.dart';
-import '../widgets/details_header.dart';
-import '../widgets/favorite_action_button.dart';
-import '../widgets/info_card.dart';
+import '../widgets/details_body.dart';
 
+/// Tela de detalhes de um país.
+///
+/// Em larguras maiores, o conteúdo deixa de crescer indefinidamente:
+/// ele permanece centralizado dentro de uma largura máxima. Em telas
+/// menores, o conteúdo utiliza a largura disponível com margens laterais.
 class DetailsScreen extends StatelessWidget {
   final Country country;
 
@@ -14,31 +16,33 @@ class DetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final favorites = FavoritesController.instance;
-
     return Scaffold(
       appBar: const AppTopBar(),
       bottomNavigationBar: const AppBottomNav(currentTab: AppTab.explore),
       body: SafeArea(
         top: false,
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-          children: [
-            DetailsHeader(country: country),
-            const SizedBox(height: 16),
-            InfoCard(country: country),
-            const SizedBox(height: 20),
-            ValueListenableBuilder<List<Country>>(
-              valueListenable: favorites.favorites,
-              builder: (context, favList, _) {
-                final isFav = favorites.isFavorite(country);
-                return FavoriteActionButton(
-                  isFavorite: isFav,
-                  onPressed: () => favorites.toggleFavorite(country),
-                );
-              },
-            ),
-          ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final horizontalPadding = constraints.maxWidth >= 700 ? 24.0 : 20.0;
+
+            return SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(
+                horizontalPadding,
+                16,
+                horizontalPadding,
+                20,
+              ),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 700),
+                  child: DetailsBody(
+                    country: country,
+                    onBack: () => Navigator.of(context).maybePop(),
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

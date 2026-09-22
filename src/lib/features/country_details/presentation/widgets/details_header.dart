@@ -7,8 +7,13 @@ import '../../../../shared/widgets/country_flag.dart';
 /// Cabeçalho da tela de detalhes: botão voltar + bandeira + nome do país.
 class DetailsHeader extends StatelessWidget {
   final Country country;
+  final VoidCallback onBack;
 
-  const DetailsHeader({super.key, required this.country});
+  const DetailsHeader({
+    super.key,
+    required this.country,
+    required this.onBack,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +33,7 @@ class DetailsHeader extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.of(context).maybePop(),
+            onPressed: onBack,
             icon: Image.asset(AppIcons.arrowLeft, width: 16, height: 16),
           ),
           const SizedBox(width: 4),
@@ -42,6 +47,7 @@ class DetailsHeader extends StatelessWidget {
                 fontWeight: FontWeight.w800,
                 fontSize: 20,
               ),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

@@ -18,12 +18,15 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
             height: 40,
           ),
           const SizedBox(width: 12),
-          const Text(
-            'World Explorer',
-            style: TextStyle(
-              color: AppColors.primaryBlue,
-              fontWeight: FontWeight.w800,
-              fontSize: 20,
+          Flexible(
+            child: Text(
+              'World Explorer',
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: AppColors.primaryBlue,
+                fontWeight: FontWeight.w800,
+                fontSize: 20,
+              ),
             ),
           ),
         ],

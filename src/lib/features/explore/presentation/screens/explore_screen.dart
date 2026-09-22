@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/models/country.dart';
 import '../../../../shared/widgets/app_bottom_nav.dart';
 import '../../../../shared/widgets/app_top_bar.dart';
 import '../../../country_details/presentation/screens/details_screen.dart';
 import '../../data/country_repository.dart';
-import '../widgets/country_list_tile.dart';
-import '../widgets/country_search_field.dart';
-import '../widgets/pagination_bar.dart';
-import '../widgets/region_filter_bar.dart';
+import '../widgets/explore_responsive_layout.dart';
 import '../widgets/region_picker_sheet.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -93,96 +89,50 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final countries = _pagedCountries;
-
     return Scaffold(
       appBar: const AppTopBar(),
       bottomNavigationBar: const AppBottomNav(currentTab: AppTab.explore),
       body: SafeArea(
         top: false,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CountrySearchField(
-                    controller: _searchController,
-                    onChanged: _onSearchChanged,
-                  ),
-                  const SizedBox(height: 12),
-                  RegionFilterBar(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isWide = constraints.maxWidth >= 700;
+            return isWide
+                ? ExploreDesktopLayout(
+                    searchController: _searchController,
+                    onSearchChanged: _onSearchChanged,
                     selectedRegion: _selectedRegion,
-                    onOpenPicker: _openRegionPicker,
-                    onClear: _clearRegion,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 4),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.cardWhite,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: countries.isEmpty
-                      ? const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(24),
-                            child: Text(
-                              'Nenhum país encontrado.',
-                              style: TextStyle(color: AppColors.textGray),
-                            ),
-                          ),
-                        )
-                      : Column(
-                          children: [
-                            Expanded(
-                              child: ListView.separated(
-                                padding: EdgeInsets.zero,
-                                itemCount: countries.length,
-                                separatorBuilder: (_, __) => const Divider(
-                                  height: 1,
-                                  color: AppColors.textGray,
-                                ),
-                                itemBuilder: (context, index) {
-                                  final country = countries[index];
-                                  return CountryListTile(
-                                    country: country,
-                                    onTap: () => _openDetails(country),
-                                  );
-                                },
-                              ),
-                            ),
-                            PaginationBar(
-                              page: _page,
-                              totalPages: _totalPages,
-                              onPrevious: _page > 0
-                                  ? () => setState(() => _page--)
-                                  : null,
-                              onNext: _page < _totalPages - 1
-                                  ? () => setState(() => _page++)
-                                  : null,
-                            ),
-                          ],
-                        ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-          ],
+                    onOpenRegionPicker: _openRegionPicker,
+                    onClearRegion: _clearRegion,
+                    countries: _pagedCountries,
+                    page: _page,
+                    totalPages: _totalPages,
+                    onPrevious: _page > 0
+                        ? () => setState(() => _page--)
+                        : null,
+                    onNext: _page < _totalPages - 1
+                        ? () => setState(() => _page++)
+                        : null,
+                    onCountryTap: _openDetails,
+                  )
+                : ExploreMobileLayout(
+                    searchController: _searchController,
+                    onSearchChanged: _onSearchChanged,
+                    selectedRegion: _selectedRegion,
+                    onOpenRegionPicker: _openRegionPicker,
+                    onClearRegion: _clearRegion,
+                    countries: _pagedCountries,
+                    page: _page,
+                    totalPages: _totalPages,
+                    onPrevious: _page > 0
+                        ? () => setState(() => _page--)
+                        : null,
+                    onNext: _page < _totalPages - 1
+                        ? () => setState(() => _page++)
+                        : null,
+                    onCountryTap: _openDetails,
+                  );
+          },
         ),
       ),
     );
