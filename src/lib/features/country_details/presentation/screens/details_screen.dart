@@ -4,11 +4,6 @@ import '../../../../shared/widgets/app_bottom_nav.dart';
 import '../../../../shared/widgets/app_top_bar.dart';
 import '../widgets/details_body.dart';
 
-/// Tela de detalhes de um país.
-///
-/// Em larguras maiores, o conteúdo deixa de crescer indefinidamente:
-/// ele permanece centralizado dentro de uma largura máxima. Em telas
-/// menores, o conteúdo utiliza a largura disponível com margens laterais.
 class DetailsScreen extends StatelessWidget {
   final Country country;
 

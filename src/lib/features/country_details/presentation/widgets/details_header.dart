@@ -4,7 +4,6 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/models/country.dart';
 import '../../../../shared/widgets/country_flag.dart';
 
-/// Cabeçalho da tela de detalhes: botão voltar + bandeira + nome do país.
 class DetailsHeader extends StatelessWidget {
   final Country country;
   final VoidCallback onBack;

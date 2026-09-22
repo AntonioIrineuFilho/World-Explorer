@@ -5,11 +5,6 @@ import 'details_header.dart';
 import 'favorite_action_button.dart';
 import 'info_card.dart';
 
-/// Conteúdo dos detalhes de um país.
-///
-/// O conteúdo principal tem largura limitada pela tela e pelo pai. O card
-/// acompanha essa largura, enquanto o botão de favoritos possui uma largura
-/// máxima própria e permanece alinhado à esquerda do conteúdo.
 class DetailsBody extends StatelessWidget {
   final Country country;
   final VoidCallback onBack;
