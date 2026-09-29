@@ -65,6 +65,18 @@ class _ExploreScreenState extends State<ExploreScreen> {
       _selectedRegion = region;
       _page = 0;
     });
+
+    _showFeedback(
+      region == null
+          ? 'Exibindo todas as regiões'
+          : 'Região filtrada: $region',
+    );
+  }
+
+  void _showFeedback(String message) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
   }
 
   void _clearRegion() {
@@ -72,13 +84,31 @@ class _ExploreScreenState extends State<ExploreScreen> {
       _selectedRegion = null;
       _page = 0;
     });
+    _showFeedback('Filtro de região removido');
   }
 
   void _onSearchChanged(String value) {
+    debugPrint('Valor digitado na busca: $value');
     setState(() {
       _query = value;
       _page = 0;
     });
+  }
+
+  void _goToPreviousPage() {
+    if (_page <= 0) return;
+    setState(() => _page--);
+    _showFeedback('Página ${_page + 1} carregada');
+  }
+
+  void _goToNextPage() {
+    if (_page >= _totalPages - 1) return;
+    setState(() => _page++);
+    _showFeedback('Página ${_page + 1} carregada');
+  }
+
+  void _onCountryLongPress(Country country) {
+    _showFeedback('País selecionado: ${country.name}');
   }
 
   void _openDetails(Country country) {
@@ -107,13 +137,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     countries: _pagedCountries,
                     page: _page,
                     totalPages: _totalPages,
-                    onPrevious: _page > 0
-                        ? () => setState(() => _page--)
-                        : null,
-                    onNext: _page < _totalPages - 1
-                        ? () => setState(() => _page++)
-                        : null,
+                    onPrevious: _page > 0 ? _goToPreviousPage : null,
+                    onNext: _page < _totalPages - 1 ? _goToNextPage : null,
                     onCountryTap: _openDetails,
+                    onCountryLongPress: _onCountryLongPress,
                   )
                 : ExploreMobileLayout(
                     searchController: _searchController,
@@ -124,13 +151,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     countries: _pagedCountries,
                     page: _page,
                     totalPages: _totalPages,
-                    onPrevious: _page > 0
-                        ? () => setState(() => _page--)
-                        : null,
-                    onNext: _page < _totalPages - 1
-                        ? () => setState(() => _page++)
-                        : null,
+                    onPrevious: _page > 0 ? _goToPreviousPage : null,
+                    onNext: _page < _totalPages - 1 ? _goToNextPage : null,
                     onCountryTap: _openDetails,
+                    onCountryLongPress: _onCountryLongPress,
                   );
           },
         ),

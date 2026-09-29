@@ -3,21 +3,23 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/models/country.dart';
 import '../../../../shared/widgets/country_flag.dart';
 
-/// Linha de país na lista de exploração: bandeira + nome (link sublinhado).
 class CountryListTile extends StatelessWidget {
   final Country country;
   final VoidCallback onTap;
+  final VoidCallback onLongPress;
 
   const CountryListTile({
     super.key,
     required this.country,
     required this.onTap,
+    required this.onLongPress,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Row(

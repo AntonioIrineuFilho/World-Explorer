@@ -18,6 +18,7 @@ class ExploreMobileLayout extends StatelessWidget {
   final VoidCallback? onPrevious;
   final VoidCallback? onNext;
   final ValueChanged<Country> onCountryTap;
+  final ValueChanged<Country> onCountryLongPress;
 
   const ExploreMobileLayout({
     super.key,
@@ -32,6 +33,7 @@ class ExploreMobileLayout extends StatelessWidget {
     required this.onPrevious,
     required this.onNext,
     required this.onCountryTap,
+    required this.onCountryLongPress,
   });
 
   @override
@@ -49,6 +51,7 @@ class ExploreMobileLayout extends StatelessWidget {
       onPrevious: onPrevious,
       onNext: onNext,
       onCountryTap: onCountryTap,
+      onCountryLongPress: onCountryLongPress,
     );
   }
 }
@@ -65,6 +68,7 @@ class ExploreDesktopLayout extends StatelessWidget {
   final VoidCallback? onPrevious;
   final VoidCallback? onNext;
   final ValueChanged<Country> onCountryTap;
+  final ValueChanged<Country> onCountryLongPress;
 
   const ExploreDesktopLayout({
     super.key,
@@ -79,6 +83,7 @@ class ExploreDesktopLayout extends StatelessWidget {
     required this.onPrevious,
     required this.onNext,
     required this.onCountryTap,
+    required this.onCountryLongPress,
   });
 
   @override
@@ -100,6 +105,7 @@ class ExploreDesktopLayout extends StatelessWidget {
           onPrevious: onPrevious,
           onNext: onNext,
           onCountryTap: onCountryTap,
+          onCountryLongPress: onCountryLongPress,
         ),
         ),
       ),
@@ -120,6 +126,7 @@ class _ExploreContent extends StatelessWidget {
   final VoidCallback? onPrevious;
   final VoidCallback? onNext;
   final ValueChanged<Country> onCountryTap;
+  final ValueChanged<Country> onCountryLongPress;
 
   const _ExploreContent({
     required this.wide,
@@ -134,6 +141,7 @@ class _ExploreContent extends StatelessWidget {
     required this.onPrevious,
     required this.onNext,
     required this.onCountryTap,
+    required this.onCountryLongPress,
   });
 
   @override
@@ -188,6 +196,7 @@ class _ExploreContent extends StatelessWidget {
               onPrevious: onPrevious,
               onNext: onNext,
               onCountryTap: onCountryTap,
+              onCountryLongPress: onCountryLongPress,
             ),
           ),
         ],
@@ -203,6 +212,7 @@ class _CountryListCard extends StatelessWidget {
   final VoidCallback? onPrevious;
   final VoidCallback? onNext;
   final ValueChanged<Country> onCountryTap;
+  final ValueChanged<Country> onCountryLongPress;
 
   const _CountryListCard({
     required this.countries,
@@ -211,6 +221,7 @@ class _CountryListCard extends StatelessWidget {
     required this.onPrevious,
     required this.onNext,
     required this.onCountryTap,
+    required this.onCountryLongPress,
   });
 
   @override
@@ -254,6 +265,7 @@ class _CountryListCard extends StatelessWidget {
                         return CountryListTile(
                           country: country,
                           onTap: () => onCountryTap(country),
+                          onLongPress: () => onCountryLongPress(country),
                         );
                       },
                     ),
