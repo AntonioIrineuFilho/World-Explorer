@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_routes.dart';
 import '../../../../shared/models/country.dart';
-import '../../../../shared/widgets/app_bottom_nav.dart';
-import '../../../../shared/widgets/app_top_bar.dart';
-import '../../../country_details/presentation/screens/details_screen.dart';
 import '../../data/country_repository.dart';
 import '../widgets/explore_responsive_layout.dart';
 import '../widgets/region_picker_sheet.dart';
@@ -112,17 +110,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
   }
 
   void _openDetails(Country country) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => DetailsScreen(country: country)),
-    );
+    Navigator.of(context).pushNamed(AppRoutes.details, arguments: country);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const AppTopBar(),
-      bottomNavigationBar: const AppBottomNav(currentTab: AppTab.explore),
-      body: SafeArea(
+    return SafeArea(
         top: false,
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -158,7 +151,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   );
           },
         ),
-      ),
-    );
+      );
   }
 }

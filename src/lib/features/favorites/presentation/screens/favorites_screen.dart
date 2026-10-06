@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_routes.dart';
 import '../../../../shared/models/country.dart';
-import '../../../../shared/widgets/app_bottom_nav.dart';
-import '../../../../shared/widgets/app_top_bar.dart';
-import '../../../country_details/presentation/screens/details_screen.dart';
 import '../../data/favorites_controller.dart';
 import '../widgets/favorites_responsive_layout.dart';
 
@@ -13,10 +11,7 @@ class FavoritesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final favorites = FavoritesController.instance;
 
-    return Scaffold(
-      appBar: const AppTopBar(),
-      bottomNavigationBar: const AppBottomNav(currentTab: AppTab.favorites),
-      body: SafeArea(
+    return SafeArea(
         top: false,
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -24,11 +19,7 @@ class FavoritesScreen extends StatelessWidget {
               valueListenable: favorites.favorites,
               builder: (context, favList, _) {
                 void openDetails(Country country) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => DetailsScreen(country: country),
-                    ),
-                  );
+                  Navigator.of(context).pushNamed(AppRoutes.details, arguments: country);
                 }
 
                 return constraints.maxWidth >= 700
@@ -46,7 +37,6 @@ class FavoritesScreen extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
+      );
   }
 }

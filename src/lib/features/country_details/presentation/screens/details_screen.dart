@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../../shared/models/country.dart';
-import '../../../../shared/widgets/app_bottom_nav.dart';
-import '../../../../shared/widgets/app_top_bar.dart';
 import '../widgets/details_body.dart';
 
 class DetailsScreen extends StatelessWidget {
@@ -12,8 +10,7 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppTopBar(),
-      bottomNavigationBar: const AppBottomNav(currentTab: AppTab.explore),
+      appBar: AppBar(title: Text(country.name)),
       body: SafeArea(
         top: false,
         child: LayoutBuilder(

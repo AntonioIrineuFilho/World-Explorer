@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'core/constants/app_routes.dart';
+import 'core/navigation/app_route_builder.dart';
 import 'core/theme/app_theme.dart';
-import 'features/explore/presentation/screens/explore_screen.dart';
-import 'features/favorites/presentation/screens/favorites_screen.dart';
+import 'features/navigation/presentation/screens/app_shell.dart';
+import 'features/navigation/presentation/screens/settings_screen.dart';
 
 class WorldExplorerApp extends StatelessWidget {
   const WorldExplorerApp({super.key});
@@ -13,11 +14,12 @@ class WorldExplorerApp extends StatelessWidget {
       title: 'World Explorer',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      initialRoute: AppRoutes.explore,
+      initialRoute: AppRoutes.home,
       routes: {
-        AppRoutes.explore: (context) => const ExploreScreen(),
-        AppRoutes.favorites: (context) => const FavoritesScreen(),
+        AppRoutes.home: (context) => const AppShell(),
+        AppRoutes.settings: (context) => const SettingsScreen(),
       },
+      onGenerateRoute: AppRouteBuilder.build,
     );
   }
 }

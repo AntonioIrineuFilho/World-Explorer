@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_icons.dart';
-import '../../core/constants/app_routes.dart';
 import '../../core/theme/app_theme.dart';
 
 enum AppTab { explore, favorites }
 
 class AppBottomNav extends StatelessWidget {
   final AppTab currentTab;
+  final ValueChanged<int> onTabSelected;
 
-  const AppBottomNav({super.key, required this.currentTab});
-
-  void _goTo(BuildContext context, AppTab tab) {
-    if (tab == currentTab) return;
-    final route =
-        tab == AppTab.explore ? AppRoutes.explore : AppRoutes.favorites;
-    Navigator.of(context).pushNamedAndRemoveUntil(route, (route) => false);
-  }
+  const AppBottomNav({
+    super.key,
+    required this.currentTab,
+    required this.onTabSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +31,14 @@ class AppBottomNav extends StatelessWidget {
                 iconAsset: AppIcons.home,
                 label: 'Explorar',
                 selected: currentTab == AppTab.explore,
-                onTap: () => _goTo(context, AppTab.explore),
+                onTap: () => onTabSelected(0),
               ),
               _NavItem(
                 iconAsset: AppIcons.star,
                 tintColor: AppColors.buttonBlue,
                 label: 'Favoritos',
                 selected: currentTab == AppTab.favorites,
-                onTap: () => _goTo(context, AppTab.favorites),
+                onTap: () => onTabSelected(1),
               ),
             ],
           ),
