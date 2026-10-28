@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'features/favorites/data/favorites_controller.dart';
 import 'core/constants/app_routes.dart';
 import 'core/navigation/app_route_builder.dart';
 import 'core/theme/app_theme.dart';
@@ -10,16 +12,19 @@ class WorldExplorerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'World Explorer',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.theme,
-      initialRoute: AppRoutes.home,
-      routes: {
-        AppRoutes.home: (context) => const AppShell(),
-        AppRoutes.settings: (context) => const SettingsScreen(),
-      },
-      onGenerateRoute: AppRouteBuilder.build,
+    return ChangeNotifierProvider(
+      create: (_) => FavoritesStore(),
+      child: MaterialApp(
+        title: 'World Explorer',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.theme,
+        initialRoute: AppRoutes.home,
+        routes: {
+          AppRoutes.home: (context) => const AppShell(),
+          AppRoutes.settings: (context) => const SettingsScreen(),
+        },
+        onGenerateRoute: AppRouteBuilder.build,
+      ),
     );
   }
 }

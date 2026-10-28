@@ -1,33 +1,27 @@
 import 'package:flutter/foundation.dart';
 import '../../../shared/models/country.dart';
 
-/// controller simples que mantém a lista de países favoritados em memória
-/// quando a persistência local real for implementada (ex: shared_preferences ou sqlite), este controlador pode
-/// ser adaptado para ler/gravar os favoritos em disco, mantendo a mesma interface (ValueNotifier) usada pelas telas
-class FavoritesController {
-  FavoritesController._internal();
+class FavoritesStore extends ChangeNotifier {
+  final List<Country> _favorites = [];
 
-  static final FavoritesController instance = FavoritesController._internal();
-
-  final ValueNotifier<List<Country>> favorites = ValueNotifier<List<Country>>([]);
+  List<Country> get favorites => List.unmodifiable(_favorites);
 
   bool isFavorite(Country country) {
-    return favorites.value.any((c) => c.code == country.code);
+    return _favorites.any((item) => item.code == country.code);
   }
 
   void toggleFavorite(Country country) {
-    final current = List<Country>.from(favorites.value);
     if (isFavorite(country)) {
-      current.removeWhere((c) => c.code == country.code);
+      _favorites.removeWhere((item) => item.code == country.code);
     } else {
-      current.add(country);
+      _favorites.add(country);
     }
-    favorites.value = current;
+    notifyListeners();
   }
 
   void removeFavorite(Country country) {
-    final current = List<Country>.from(favorites.value)
-      ..removeWhere((c) => c.code == country.code);
-    favorites.value = current;
+    final previousLength = _favorites.length;
+    _favorites.removeWhere((item) => item.code == country.code);
+    if (_favorites.length != previousLength) notifyListeners();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../../shared/models/country.dart';
 import '../../../favorites/data/favorites_controller.dart';
 import 'details_header.dart';
@@ -17,8 +18,6 @@ class DetailsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final favorites = FavoritesController.instance;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -32,12 +31,10 @@ class DetailsBody extends StatelessWidget {
             constraints: const BoxConstraints(maxWidth: 300),
             child: SizedBox(
               width: double.infinity,
-              child: ValueListenableBuilder<List<Country>>(
-                valueListenable: favorites.favorites,
-                builder: (context, favList, _) {
-                  final isFav = favorites.isFavorite(country);
+              child: Consumer<FavoritesStore>(
+                builder: (context, favorites, _) {
                   return FavoriteActionButton(
-                    isFavorite: isFav,
+                    isFavorite: favorites.isFavorite(country),
                     onPressed: () => favorites.toggleFavorite(country),
                   );
                 },
