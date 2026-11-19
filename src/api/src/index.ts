@@ -10,11 +10,10 @@ const app = express()
 app.use(express.json())
 
 app.use(cors({
-  origin: '*',
-  exposedHeaders: ['Authorization'],
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true     
+    origin: '*',
+    exposedHeaders: ['Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }))
 
 app.use('/api', publicRouter)

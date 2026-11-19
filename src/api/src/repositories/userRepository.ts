@@ -1,21 +1,17 @@
-import type { IUser } from "../interfaces/IUser";
+import type { IUser } from '../interfaces/IUser'
 import db from '../db'
 
 class UserRepository {
-    constructor() {}
-
     async create(data: IUser) {
-        return await db.user.create({
-            data: data
-        })
+        return db.user.create({ data })
     }
 
     async findUniqueByEmail(email: string) {
-        return await db.user.findUnique({
-            where: {
-                email: email
-            }
-        })
+        return db.user.findUnique({ where: { email } })
+    }
+
+    async findUniqueById(id: number) {
+        return db.user.findUnique({ where: { id } })
     }
 }
 

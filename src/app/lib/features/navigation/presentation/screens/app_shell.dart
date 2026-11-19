@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../auth/data/auth_controller.dart';
 import '../../../../shared/widgets/app_bottom_nav.dart';
 import '../../../../shared/widgets/app_top_bar.dart';
 import '../../../../core/constants/app_routes.dart';
@@ -85,6 +87,23 @@ class _AppShellState extends State<AppShell> {
       );
   }
 
+  Future<void> _openLogin() async {
+    Navigator.of(context).pop();
+    await Navigator.of(context).pushNamed(AppRoutes.login);
+  }
+
+  Future<void> _logout() async {
+    Navigator.of(context).pop();
+    try {
+      await context.read<AuthController>().logout();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Você saiu da sua conta.')));
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    }
+  }
+
   void _showAbout() {
     Navigator.of(context).pop();
     showDialog<void>(
@@ -110,31 +129,28 @@ class _AppShellState extends State<AppShell> {
       onWillPop: _handleBack,
       child: Scaffold(
         appBar: const AppTopBar(),
-        drawer: Drawer(
+        endDrawer: Drawer(
           child: SafeArea(
             child: Column(
               children: [
-                const DrawerHeader(
-                  child: Center(
-                    child: Text(
-                      'World Explorer',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+                Consumer<AuthController>(builder: (context, auth, _) => DrawerHeader(
+                  child: Center(child: auth.isAuthenticated
+                    ? Text('Bem-vindo, ${auth.user!.name}!', textAlign: TextAlign.center, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
+                    : const Text('World Explorer', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))),
+                )),
+                Consumer<AuthController>(builder: (context, auth, _) => auth.isAuthenticated
+                  ? const SizedBox.shrink()
+                  : ListTile(leading: const Icon(Icons.login), title: const Text('Entrar'), onTap: _openLogin)),
                 ListTile(
                   leading: const Icon(Icons.settings),
                   title: const Text('Configurações'),
                   onTap: _openSettings,
                 ),
-                ListTile(
-                  leading: const Icon(Icons.info_outline),
-                  title: const Text('Sobre'),
-                  onTap: _showAbout,
-                ),
+                ListTile(leading: const Icon(Icons.info_outline), title: const Text('Sobre'), onTap: _showAbout),
+                const Spacer(),
+                Consumer<AuthController>(builder: (context, auth, _) => auth.isAuthenticated
+                  ? ListTile(leading: const Icon(Icons.logout), title: const Text('Sair'), onTap: _logout)
+                  : const SizedBox.shrink()),
               ],
             ),
           ),
